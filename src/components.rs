@@ -13,4 +13,11 @@ pub struct Speed {
 }
 
 #[derive(Component)]
+pub enum Direction {
+    Static,
+    Left,
+    Right
+}
+
+#[derive(Component)]
 pub struct BreakoutTile;
