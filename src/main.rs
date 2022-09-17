@@ -6,6 +6,8 @@ mod ball_movement_system;
 mod player_movement_system;
 mod tiles_collision_system;
 mod wall_collision_system;
+mod despawning_system;
+mod gameover_ui_system;
 
 // Bevy library imports
 
@@ -22,6 +24,9 @@ use setup_system::*;
 use player_movement_system::*;
 use ball_movement_system::*;
 use wall_collision_system::*;
+use despawning_system::*;
+use gameover_ui_system::*;
+use components::AppState;
 
 // Game Constants
 
@@ -51,13 +56,41 @@ fn main() {
             ..Default::default()
         })
         .insert_resource(Msaa {samples: 4})
-        .insert_resource(ClearColor{0: Color::rgb(0.0, 181.0, 226.0)})
         .add_plugins(DefaultPlugins)
         .add_plugin(ShapePlugin)
-        .add_startup_system(setup_system)
-        .add_system(player_movement_system)
-        .add_system(ball_movement_system)
-        .add_system(player_wall_collision_system)
-        .add_system(ball_wall_collision_system)
+        .add_state(AppState::InGame)
+        .add_system_set(
+            SystemSet::on_enter(AppState::InGame)
+                .with_system(setup_system)
+        )
+        .add_system_set(
+            SystemSet::on_update(AppState::InGame)
+                .with_system(player_movement_system)
+                .with_system(ball_movement_system)
+                .with_system(player_wall_collision_system)
+                .with_system(ball_wall_collision_system)
+        )
+        .add_system_set(
+            SystemSet::on_exit(AppState::InGame)
+                .with_system(despawning_system)
+        )
+        .add_system_set(
+            SystemSet::on_enter(AppState::End)
+                .with_system(gameover_ui_setup_system)
+        )
+        .add_system_set(
+            SystemSet::on_update(AppState::End)
+                .with_system(gameover_ui_ongoing_system)
+        )
+        .add_system_set(
+            SystemSet::on_exit(AppState::End)
+                .with_system(despawning_system)
+        )
         .run();
 }
+
+// .add_startup_system(setup_system)
+// .add_system(player_movement_system)
+// .add_system(ball_movement_system)
+// .add_system(player_wall_collision_system)
+// .add_system(ball_wall_collision_system)
