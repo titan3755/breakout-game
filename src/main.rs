@@ -39,6 +39,11 @@ pub const CURSOR_VISIBILITY: bool = false;
 pub const BALL_RADIUS: f32 = 15.0;
 pub const PLAYER_DIMENSIONS: (f32, f32) = (125.0, 12.0);
 pub const PLAYER_SPEED: f32 = 5.0;
+pub const TILE_DIMENSIONS: (f32, f32) = (20.0, 10.0);
+pub const TILE_ROWS: i32 = 8;
+pub const TILE_COLS: i32 = 20;
+pub const TILE_ROW_GAP: f32 = 20.0;
+pub const TILE_COL_GAP: f32 = 40.0;
 
 // Application entry point
 
@@ -69,6 +74,7 @@ fn main() {
                 .with_system(ball_movement_system)
                 .with_system(player_wall_collision_system)
                 .with_system(ball_wall_collision_system)
+                .with_system(ball_paddle_collision_system)
         )
         .add_system_set(
             SystemSet::on_exit(AppState::InGame)
@@ -88,6 +94,8 @@ fn main() {
         )
         .run();
 }
+
+// References -->
 
 // .add_startup_system(setup_system)
 // .add_system(player_movement_system)

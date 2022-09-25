@@ -31,8 +31,12 @@ pub fn ball_wall_collision_system(mut ball_query: Query<(&Transform, &mut Speed)
     }
 }
 
-pub fn ball_paddle_collision_system(mut ball_query: Query<(&Transform, &mut Speed), With<Ball>>, mut player_query: Query<&Transform, Without<Ball>>) {
-    let (b_transform, mut b_speed) = ball_query.single_mut();
-    let p_transform = player_query.single_mut();
+// mut ball_query: Query<(&Transform, &mut Speed), With<Ball>>, mut player_query: Query<&Transform, Without<Ball>>
 
+pub fn ball_paddle_collision_system(mut ball_query: Query<(&Ball, &Transform, &mut Speed)>, mut player_query: Query<(&Player, &Transform)>) {
+    let (_ball, b_transform, mut b_speed) = ball_query.single_mut();
+    let (_player, p_transform) = player_query.single_mut();
+    if b_transform.translation.x < p_transform.translation.x + PLAYER_DIMENSIONS.0 * 2.0 && b_transform.translation.x > p_transform.translation.x - PLAYER_DIMENSIONS.0 * 2.0 && b_transform.translation.y < -(HEIGHT / 2.0) + (BALL_RADIUS + 100.0) {
+        b_speed.y_speed = -b_speed.y_speed;
+    }
 }
