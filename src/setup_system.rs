@@ -37,7 +37,10 @@ pub fn setup_system(mut commands: Commands) {
         center: Vec2 {x: -WIDTH / 2.0 + 250.0, y: -HEIGHT / 2.0 + 250.0}
     };
     commands.insert_resource(ClearColor{0: Color::rgb(0.0, 181.0, 226.0)});
-    commands.spawn_bundle(Camera2dBundle::default());
+    commands.spawn_bundle(Camera2dBundle::default())
+        .insert(UiCameraConfig {
+            show_ui: true,
+        });
     commands.spawn_bundle(GeometryBuilder::build_as(
         &shape,
         DrawMode::Outlined {

@@ -6,32 +6,29 @@ use crate::AppState;
 struct TextComp;
 
 pub fn gameover_ui_setup_system(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn_bundle(Camera2dBundle::default());
     commands.insert_resource(ClearColor{0: Color::rgb(0.0, 0.0, 0.0)});
-    commands
-        .spawn_bundle(
-            // Create a TextBundle that has a Text with a single section.
-            TextBundle::from_section(
-                // Accepts a `String` or any type that converts into a `String`, such as `&str`
-                "hello\nbevy!",
-                TextStyle {
-                    font: asset_server.load("Rubik-Bold.ttf"),
-                    font_size: 100.0,
-                    color: Color::WHITE,
-                },
-            ) // Set the alignment of the Text
-                .with_text_alignment(TextAlignment::TOP_CENTER)
-                // Set the style of the TextBundle itself.
-                .with_style(Style {
-                    align_self: AlignSelf::FlexEnd,
-                    position_type: PositionType::Absolute,
-                    position: UiRect {
-                        bottom: Val::Px(5.0),
-                        right: Val::Px(15.0),
-                        ..default()
-                    },
-                    ..default()
-                }),
-        )
+    commands.spawn_bundle(TextBundle {
+        text: Text::from_section(
+            "     Game Over! Press \"R\" to restart",
+            TextStyle {
+                font_size: 60.0,
+                color: Color::WHITE,
+                font: asset_server.load("fonts/FiraSans-Medium.ttf")
+            },
+        ).with_alignment(TextAlignment::CENTER),
+        style: Style {
+            align_self: AlignSelf::Center,
+            align_items: AlignItems::Center,
+            align_content: AlignContent::Center,
+            justify_content: JustifyContent::Center,
+            display: Display::Flex,
+            flex_direction: FlexDirection::Row,
+            flex_wrap: FlexWrap::Wrap,
+            ..default()
+        },
+        ..default()
+    })
         .insert(TextComp);
 }
 

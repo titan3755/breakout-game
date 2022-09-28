@@ -17,6 +17,7 @@ use bevy::window::PresentMode;
 // Other library imports
 
 use bevy_prototype_lyon::prelude::*;
+use bevy_inspector_egui::world_inspector::WorldInspectorPlugin;
 
 // System & Function imports
 
@@ -62,6 +63,7 @@ fn main() {
         })
         .insert_resource(Msaa {samples: 4})
         .add_plugins(DefaultPlugins)
+        .add_plugin(WorldInspectorPlugin::new())
         .add_plugin(ShapePlugin)
         .add_state(AppState::InGame)
         .add_system_set(
